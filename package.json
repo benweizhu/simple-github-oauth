@@ -1,0 +1,17 @@
+{
+  "name": "simple-organzation-github-oauth",
+  "version": "1.0.0",
+  "description": "middleware for oauth with github",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "benweizhu",
+  "repository": "https://github.com/benweizhu/simple-organzation-github-oauth",
+  "dependencies": {
+    "async": "0.2.10",
+    "cookie-signature": "1.0.1",
+    "request": "2.33.0",
+    "routil-cookie": "0.0.1"
+  }
+}
