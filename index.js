@@ -14,6 +14,12 @@ var redirect = function (url, response) {
     response.end();
 };
 
+var toFunction = function (str) {
+    return function () {
+        return str;
+    };
+};
+
 module.exports = function (clientId, clientSecret, config) {
     var scope = (config.team || config.organization) ? 'read:org' : 'public';
     var secret = config.secret || Math.random().toString();
@@ -21,6 +27,8 @@ module.exports = function (clientId, clientSecret, config) {
     var userAgent = config.userAgent || 'github-auth';
     var redirectUri = config.redirectUri || '';
     var accessToken;
+
+    if (typeof redirectUri !== 'function') redirectUri = toFunction(redirectUri);
 
     var getRequest = function (url, cb) {
         request(url + '?access_token=' + accessToken, {
