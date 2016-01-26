@@ -57,8 +57,7 @@ module.exports = function (clientId, clientSecret, config) {
   var getTeamId = function (cb) {
     getRequest('https://api.github.com/orgs/' + config.organization + '/teams', function (err, res, body) {
       if (err) return cb(err);
-      if (res.statusCode === 403) return cb(false);
-      if (res.statusCode >= 300) return cb(new Error('Bad credentials -- get team id'));
+      if (res.statusCode >= 300) return cb(new Error('Get all teams failed'));
       var teams;
       try {
         teams = JSON.parse(body);
@@ -79,13 +78,12 @@ module.exports = function (clientId, clientSecret, config) {
     if (!config.team) return callback(new Error('The team is required.'));
 
     getTeamId(function (err, tid) {
-      if (err) return callback(err);
+      if (err) return callback(null, false);
       getUsersOnTeam(tid, function (err, users) {
-        if (err) return callback(err);
+        if (err) return callback(null, false);
         callback(null, users.indexOf(ghusr) !== -1);
       });
     });
-
   };
 
   var isInOrganization = function (callback) {
@@ -123,7 +121,7 @@ module.exports = function (clientId, clientSecret, config) {
     lastGhUpdate = new Date().getTime();
     getRequest('https://api.github.com/teams/' + teamId + '/members', function (err, res, body) {
       if (err) return cb(err);
-      if (res.statusCode >= 300) return cb(new Error('Bad credentials -- users on team'));
+      if (res.statusCode >= 300) return cb(new Error('get teams memebers failed'));
       var usrsObj = JSON.parse(body);
       authUsers = usrsObj.map(function (x) {
         return x.login;
