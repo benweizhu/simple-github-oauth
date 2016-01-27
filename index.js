@@ -40,36 +40,36 @@ module.exports = function (clientId, clientSecret, config) {
 
   var getUser = function (callback) {
     getRequest('https://api.github.com/user', function (err, res, body) {
-      if (err) {
-        return callback(err);
-      }
+      if (err) return callback(err);
+
       var userInfo;
       try {
         userInfo = JSON.parse(body);
       } catch (e) {
         return callback(new Error(body), null);
       }
+
       callback(null, userInfo.login);
     });
   };
 
 
-  var getTeamId = function (cb) {
+  var getTeamId = function (callback) {
     getRequest('https://api.github.com/orgs/' + config.organization + '/teams', function (err, res, body) {
-      if (err) return cb(err);
-      if (res.statusCode >= 300) return cb(new Error('Get all teams failed'));
+      if (err) return callback(err);
+      if (res.statusCode >= 300) return callback(new Error('Get all teams failed'));
+
       var teams;
       try {
         teams = JSON.parse(body);
-      }
-      catch (e) {
-        return cb(new Error(body), null);
+      } catch (e) {
+        return callback(new Error(body), null);
       }
 
       var teamId = teams.filter(function (x) {
         return x.name === config.team;
       })[0].id;
-      cb(null, teamId);
+      callback(null, teamId);
     });
   };
 
@@ -154,6 +154,8 @@ module.exports = function (clientId, clientSecret, config) {
       req.github = {};
 
       var cookie = getCookie(req, cookieName);
+      // unsign will return false is value is not correct
+      // the secret key will change whenever the server restarted.
       var unsignedCookie = cookie ? cookieSign.unsign(cookie, secret) : false;
       if (unsignedCookie) {
         req.github.authenticated = true;
