@@ -162,12 +162,15 @@ module.exports = function (clientId, clientSecret, config) {
       }
       var parsedUrl = url.parse(req.url, true);
       if (!parsedUrl.query.code) {
-        if (config.autologin) {
-          return redirect(githubOauthUrl(req), res);
-        }
-        delete req.github;
+        return redirect(githubOauthUrl(req), res);
         return next();
       }
+
+      if (parsedUrl.query.state !== state) {
+        req.github.authenticated = false;
+        return next();
+      }
+
       request.post('https://github.com/login/oauth/access_token', {
         headers: {
           'User-Agent': userAgent
@@ -184,7 +187,7 @@ module.exports = function (clientId, clientSecret, config) {
           return next(err);
         }
 
-        accessToken = url.parse('/?' + body, true).query.access_token;// covert to query and parse to object
+        accessToken = url.parse('/?' + body, true).query.access_token; // covert to query and parse to object
 
         getUser(function (err, ghusr) {
           if (err) return next(err);
