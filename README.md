@@ -1,4 +1,4 @@
-# simple-github-oauth
+# simple-organization-github-oauth
 
 This is a customise version of code https://github.com/debitoor/github-auth.
  
