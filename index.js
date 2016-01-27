@@ -55,7 +55,7 @@ module.exports = function (clientId, clientSecret, config) {
 
 
   var getTeamId = function (callback) {
-    getRequest('https://api.github.com/orgs/' + config.organization + '/teams', function (err, res, body) {
+    getRequest('https://api.github.com/user/teams', function (err, res, body) {
       if (err) return callback(err);
       if (res.statusCode >= 300) return callback(new Error('Get all teams failed'));
 
@@ -66,9 +66,15 @@ module.exports = function (clientId, clientSecret, config) {
         return callback(new Error(body), null);
       }
 
-      var teamId = teams.filter(function (x) {
+      var filtedTeams = teams.filter(function (x) {
         return x.name === config.team;
-      })[0].id;
+      });
+
+      if (filtedTeams.length < 1){
+        return callback(new Error('Not in team'));
+      }
+
+      var teamId = filtedTeams[0].id;
       callback(null, teamId);
     });
   };
