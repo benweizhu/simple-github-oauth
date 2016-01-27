@@ -1,6 +1,6 @@
 {
   "name": "simple-organzation-github-oauth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "middleware for oauth with github",
   "main": "index.js",
   "scripts": {
