@@ -9,9 +9,9 @@
   "author": "benweizhu",
   "repository": "https://github.com/benweizhu/simple-organzation-github-oauth",
   "dependencies": {
-    "async": "0.2.10",
+    "async": "3.2.2",
     "cookie-signature": "1.0.1",
-    "request": "2.33.0",
+    "request": "2.75.0",
     "routil-cookie": "0.0.1"
   }
 }
